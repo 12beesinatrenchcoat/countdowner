@@ -1,0 +1,32 @@
+{
+  "name": "countdowner",
+  "version": "0.0.1",
+  "description": "a countdown timer app.",
+  "private": true,
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "npm run ts && npm run sass",
+    "ts": "esbuild src/script.ts --bundle --outfile=dist/script.js",
+    "sass": "sass style.sass style.css",
+    "test": "tsc -noEmit && eslint src/**"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/12beesinatrenchcoat/countdowner.git"
+  },
+  "author": "Andy Chan / 12beesinatrenchcoat <12beesinatrenchcoat@protonmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/12beesinatrenchcoat/countdowner/issues"
+  },
+  "homepage": "https://github.com/12beesinatrenchcoat/countdowner#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "esbuild": "^0.14.28",
+    "eslint": "^8.11.0",
+    "eslint-config-xo": "^0.40.0",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.6.3"
+  }
+}

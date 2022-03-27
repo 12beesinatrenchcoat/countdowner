@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<title>countdowner</title>
+		<link rel="stylesheet" href="./style.css">
+		<script defer src="./dist/script.js"></script>
+
+		<!-- fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Open+Sans:wght@400;700&display=swap"
+			rel="stylesheet">
+	</head>
+
+	<body>
+		<h1>countdowner</h1>
+		<p>
+			the time is now <time id="current-time">now</time>
+		</p>
+
+		<div class="tabbed">
+			<div class="tab-select">
+				<a href="#add-timer" class="tab">add timer</a>
+				<a href="#add-event" class="tab">add event</a>
+			</div>
+			<div class="tab-content" id="add-timer">
+				<label>
+					title <input type="text" name="title" id="timer-title">
+				</label>
+				<label>
+					<input type="number" name="hours" id="timer-hours"> hours
+				</label>
+				<label>
+					<input type="number" name="minutes" id="timer-minutes"> minutes
+				</label>
+				<label>
+					<input type="number" name="seconds" id="timer-seconds"> seconds
+				</label>
+				<button id="new-timer">add timer</button>
+			</div>
+			<div class="tab-content" id="add-event">
+				<label>
+					title <input type="text" name="title" id="event-name">
+				</label>
+				<label>
+					date
+					<input type="datetime-local" name="date" id="event-date">
+				</label>
+				<button id="new-timer">add event</button>
+			</div>
+		</div>
+
+		<div id="countdowns">
+
+		</div>
+	</body>
+
+</html>
