@@ -1,6 +1,15 @@
-let locale = new Intl.DateTimeFormat();
+const locale: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, {
+	weekday: "long",
+	year: "numeric",
+	month: "long",
+	day: "numeric",
+	hour: "numeric",
+	minute: "2-digit",
+	second: "2-digit",
+	timeZoneName: "short",
+});
 
-let {format} = locale;
+const {format} = locale;
 
 const MS_IN_DAY = 86400000;
 const MS_IN_HOUR = 3600000;

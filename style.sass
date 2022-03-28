@@ -1,13 +1,16 @@
-:root
+*
 	font-family: "Open Sans", sans-serif
+
+*[hidden]
+	display: none !important
 
 body
 	color: black
 	background: white
 	margin: 1em
 
-.number
-	font-family: "JetBrains Mono", monospace
+button
+	height: 2em
 
 .tab-content
 	display: none
@@ -25,3 +28,34 @@ body
 .countdown
 	display: flex
 	flex-direction: column
+	max-width: 48ch
+
+	margin: 1em
+	border: 2px black solid
+	padding: 1em
+
+.countdown-header
+	display: flex
+	align-items: center
+	justify-content: space-between
+	height: 2.25em
+
+	> *
+		display: inline-block
+
+.title-edit
+	height: 1em
+	font-size: 1.5em
+	font-weight: 600
+	width: 24ch
+
+// The countdown bit.
+span[data-end]
+	margin: 1em 0
+	font-family: "JetBrains Mono", monospace
+
+.footer
+	height: 1.25em
+
+	> input
+		height: 1em
