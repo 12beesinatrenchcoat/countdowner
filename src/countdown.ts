@@ -136,7 +136,9 @@ function addCountdown(countdown: Countdown) {
 			// Saving changes
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
-			timeLeft.dataset.end = String(dateEdit.valueAsNumber);
+			const newEnd = new Date(dateEdit.valueAsNumber);
+			newEnd.setMinutes(newEnd.getMinutes() + offset);
+			timeLeft.dataset.end = String(newEnd.getTime());
 		}
 	});
 
