@@ -6,7 +6,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "npm run ts && npm run sass",
-    "ts": "esbuild src/script.ts --bundle --outfile=dist/script.js",
+    "ts": "esbuild src/script.ts --sourcemap --bundle --outfile=dist/script.js",
     "sass": "sass style.sass style.css",
     "test": "tsc -noEmit && eslint src/**"
   },
