@@ -1,5 +1,4 @@
 const countdownsDiv = document.getElementById("countdowns");
-const countdowns: Array<Object> = [];
 const currentTimeElement = document.getElementById("current-time")!;
 
 import {formatAsDate, formatAsDuration} from "./formatting";
@@ -35,8 +34,6 @@ document.getElementById("new-timer")!.addEventListener("click", () => {
 	const timer = new Countdown(title, currentTime, finalTime, "timer");
 
 	addCountdown(timer);
-
-	console.log(countdowns);
 });
 
 // Adding an event
@@ -56,10 +53,7 @@ class Countdown {
 
 // Adding a countdown to the page
 function addCountdown(countdown: Countdown) {
-	// Add to array
-	countdowns.push(countdown);
-
-	// Add element to page
+	// Outer div, contains everything
 	const outerDiv = document.createElement("div");
 	outerDiv.classList.add("countdown", countdown.type);
 
@@ -97,6 +91,7 @@ function addCountdown(countdown: Countdown) {
 			outerDiv.remove();
 		}
 
+		// Deletion confirmation
 		if (deleteButton.textContent === "delete") {
 			deleteButton.textContent = "you sure?";
 			setTimeout(() => {
@@ -108,29 +103,25 @@ function addCountdown(countdown: Countdown) {
 	buttonsSpan.append(editButton, deleteButton);
 
 	headerSpan.append(titleSpan, buttonsSpan);
-	outerDiv.append(headerSpan);
 
 	// Time left. The countdown.
 	const timeLeft = document.createElement("span");
 	timeLeft.dataset.start = String(countdown.startTime);
 	timeLeft.dataset.end = String(countdown.endTime);
 	timeLeft.textContent = String(countdown.endTime - Date.now());
-	outerDiv.appendChild(timeLeft);
 
 	const footer = document.createElement("div");
 	footer.className = "footer";
-	outerDiv.appendChild(footer);
 
 	// Editing!
-
 	const dateEdit = document.createElement("input");
 	dateEdit.type = "datetime-local";
 	dateEdit.className = "date-edit";
 	dateEdit.hidden = true;
 
-	const timeStart = document.createElement("time");
-	timeStart.className = "start";
-	timeStart.textContent = formatAsDate(countdown.endTime);
+	const timeEnd = document.createElement("time");
+	timeEnd.className = "start";
+	timeEnd.textContent = formatAsDate(countdown.endTime);
 
 	editButton.addEventListener("click", () => {
 		const endTimeAsDate = new Date(countdown.endTime);
@@ -138,7 +129,7 @@ function addCountdown(countdown: Countdown) {
 		endTimeAsDate.setMinutes(endTimeAsDate.getMinutes() - offset);
 
 		dateEdit.hidden = !dateEdit.hidden;
-		timeStart.hidden = !timeStart.hidden;
+		timeEnd.hidden = !timeEnd.hidden;
 		title.hidden = !title.hidden;
 		titleEdit.hidden = !titleEdit.hidden;
 
@@ -157,7 +148,9 @@ function addCountdown(countdown: Countdown) {
 		}
 	});
 
-	footer.append("Ends at ", dateEdit, timeStart);
+	footer.append("Ends at ", dateEdit, timeEnd);
+
+	outerDiv.append(headerSpan, timeLeft, footer);
 
 	countdownsDiv?.appendChild(outerDiv);
 }
