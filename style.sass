@@ -1,3 +1,6 @@
+:root
+	font-size: 16px
+
 *
 	font-family: "Open Sans", sans-serif
 
@@ -38,16 +41,33 @@ button
 	display: flex
 	align-items: center
 	justify-content: space-between
+	flex-wrap: nowrap
 	height: 2.25em
 
 	> *
 		display: inline-block
 
+.title-span
+	flex-grow: 0.75
+	flex-basis: 50%
+	
 .title-edit
 	height: 1em
 	font-size: 1.5em
 	font-weight: 600
-	width: 24ch
+	width: 100%
+
+.buttons
+	text-align: right
+	flex-shrink: 0
+	> * + *
+		margin-left: 0.5em
+
+.edit
+	width: 7ch
+
+.delete
+	width: 10ch
 
 // The countdown bit.
 span[data-end]
@@ -59,3 +79,4 @@ span[data-end]
 
 	> input
 		height: 1em
+		font-size: 1em

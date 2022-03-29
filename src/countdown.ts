@@ -67,6 +67,9 @@ function addCountdown(countdown: Countdown) {
 	const headerSpan = document.createElement("span");
 	headerSpan.className = "countdown-header";
 
+	const titleSpan = document.createElement("span");
+	titleSpan.className = "title-span";
+
 	const title = document.createElement("h2");
 	title.textContent = countdown.title;
 	title.className = "title";
@@ -77,7 +80,10 @@ function addCountdown(countdown: Countdown) {
 	titleEdit.hidden = true;
 	titleEdit.className = "title-edit";
 
+	titleSpan.append(title, titleEdit);
+
 	const buttonsSpan = document.createElement("span");
+	buttonsSpan.className = "buttons";
 
 	const editButton = document.createElement("button");
 	editButton.textContent = "edit";
@@ -87,12 +93,21 @@ function addCountdown(countdown: Countdown) {
 	deleteButton.textContent = "delete";
 	deleteButton.className = "delete";
 	deleteButton.addEventListener("click", () => {
-		outerDiv.remove();
+		if (deleteButton.textContent === "you sure?") {
+			outerDiv.remove();
+		}
+
+		if (deleteButton.textContent === "delete") {
+			deleteButton.textContent = "you sure?";
+			setTimeout(() => {
+				deleteButton.textContent = "delete";
+			}, 5000);
+		}
 	});
 
 	buttonsSpan.append(editButton, deleteButton);
 
-	headerSpan.append(title, titleEdit, buttonsSpan);
+	headerSpan.append(titleSpan, buttonsSpan);
 	outerDiv.append(headerSpan);
 
 	// Time left. The countdown.
@@ -110,7 +125,7 @@ function addCountdown(countdown: Countdown) {
 
 	const dateEdit = document.createElement("input");
 	dateEdit.type = "datetime-local";
-	dateEdit.className = "edit-date";
+	dateEdit.className = "date-edit";
 	dateEdit.hidden = true;
 
 	const timeStart = document.createElement("time");
