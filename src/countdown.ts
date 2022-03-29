@@ -139,25 +139,30 @@ function addCountdown(countdown: Countdown) {
 	timeEnd.textContent = formatAsDate(countdown.endTime);
 
 	editButton.addEventListener("click", () => {
-		const endTimeAsDate = new Date(countdown.endTime);
-		const offset = new Date().getTimezoneOffset() * 60000;
+		const endTimeAsDate = new Date(Number(timeLeft.dataset.end));
+		// For converting Local <-> UTC
+		let offset = new Date().getTimezoneOffset() * 60000;
+		// Because daylight savings
+		offset -= (offset - (endTimeAsDate.getTimezoneOffset() * 60000));
 
 		dateEdit.hidden = !dateEdit.hidden;
 		timeEnd.hidden = !timeEnd.hidden;
 		title.hidden = !title.hidden;
 		titleEdit.hidden = !titleEdit.hidden;
 
-		if (editButton.textContent === "edit") {
-			// Entering edit mode
+		if (editButton.textContent === "edit") { // -> Edit mode
 			editButton.textContent = "save";
 			titleEdit.value = title.textContent || "";
+			// UTC -> Local
 			dateEdit.valueAsNumber = endTimeAsDate.getTime() - offset;
-		} else {
-			// Saving changes
+		} else { // Saving
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
 			const newEnd = new Date(dateEdit.valueAsNumber);
+			// Local -> UTC
 			timeLeft.dataset.end = String(newEnd.getTime() + offset);
+			// Also need to update the "Ends at"
+			timeEnd.textContent = formatAsDate(newEnd.getTime() + offset);
 		}
 	});
 
