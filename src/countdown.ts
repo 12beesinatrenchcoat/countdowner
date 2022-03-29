@@ -37,6 +37,21 @@ document.getElementById("new-timer")!.addEventListener("click", () => {
 });
 
 // Adding an event
+document.getElementById("new-event")!.addEventListener("click", () => {
+	const currentTime = Date.now();
+
+	// Get inputs
+	const titleInput = document.getElementById("event-title") as HTMLInputElement;
+	const dateInput = document.getElementById("event-date") as HTMLInputElement;
+
+	const date = new Date(dateInput.value);
+
+	const event = new Countdown(titleInput.value, currentTime, date.getTime(), "event");
+
+	addCountdown(event);
+});
+
+// Countdown class
 class Countdown {
 	title: string;
 	startTime: number;
@@ -125,8 +140,7 @@ function addCountdown(countdown: Countdown) {
 
 	editButton.addEventListener("click", () => {
 		const endTimeAsDate = new Date(countdown.endTime);
-		const offset = new Date().getTimezoneOffset();
-		endTimeAsDate.setMinutes(endTimeAsDate.getMinutes() - offset);
+		const offset = new Date().getTimezoneOffset() * 60000;
 
 		dateEdit.hidden = !dateEdit.hidden;
 		timeEnd.hidden = !timeEnd.hidden;
@@ -137,14 +151,13 @@ function addCountdown(countdown: Countdown) {
 			// Entering edit mode
 			editButton.textContent = "save";
 			titleEdit.value = title.textContent || "";
-			dateEdit.valueAsNumber = endTimeAsDate.getTime();
+			dateEdit.valueAsNumber = endTimeAsDate.getTime() - offset;
 		} else {
 			// Saving changes
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
 			const newEnd = new Date(dateEdit.valueAsNumber);
-			newEnd.setMinutes(newEnd.getMinutes() + offset);
-			timeLeft.dataset.end = String(newEnd.getTime());
+			timeLeft.dataset.end = String(newEnd.getTime() + offset);
 		}
 	});
 
