@@ -1,11 +1,13 @@
-document.querySelectorAll(".tab").forEach(tab => {
+for (const tab of document.querySelectorAll(".tab")) {
 	tab.addEventListener("click", () => {
 		const tabName = String(tab.getAttribute("href"));
 
-		// Hiding other tabs first
-		tab.parentElement?.parentElement?.querySelectorAll<HTMLElement>(".tab-content").forEach(tabContent => {
+		const tabContents = tab.parentElement?.parentElement?.querySelectorAll<HTMLElement>(".tab-content") || [];
+
+		// Hiding all tab contents first
+		for (const tabContent of tabContents) {
 			tabContent.style.display = "none";
-		});
+		}
 
 		// Unhiding the corresponding tab content
 		const tabContent = document.querySelector<HTMLElement>(tabName);
@@ -17,11 +19,11 @@ document.querySelectorAll(".tab").forEach(tab => {
 
 		// Removing "selected" class
 		const otherTabs = tab.parentElement?.children;
-		for (let i = 0; i < otherTabs!.length; i++) {
-			otherTabs![i].classList.remove("selected");
+		for (let index = 0; index < otherTabs!.length; index++) {
+			otherTabs![index].classList.remove("selected");
 		}
 
 		// And adding it again
 		tab.classList.add("selected");
 	});
-});
+}

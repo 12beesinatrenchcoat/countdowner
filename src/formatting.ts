@@ -9,9 +9,9 @@ const locale: Intl.DateTimeFormat = new Intl.DateTimeFormat(undefined, {
 
 const {format} = locale;
 
-const MS_IN_DAY = 86400000;
-const MS_IN_HOUR = 3600000;
-const MS_IN_MIN = 60000;
+const MS_IN_DAY = 86_400_000;
+const MS_IN_HOUR = 3_600_000;
+const MS_IN_MIN = 60_000;
 const MS_IN_SEC = 1000;
 function formatAsDuration(duration: number) {
 	const days = Math.floor(duration / MS_IN_DAY);
