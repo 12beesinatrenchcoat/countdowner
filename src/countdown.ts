@@ -1,5 +1,5 @@
-const countdownsDiv = document.getElementById("countdowns");
-const currentTimeElement = document.getElementById("current-time")!;
+const countdownsDiv = document.querySelector("#countdowns");
+const currentTimeElement = document.querySelector("#current-time")!;
 const countdowns: Array<Countdown> = [];
 
 import {formatAsDate, formatAsDuration} from "./formatting";
@@ -10,7 +10,7 @@ setInterval(() => {
 	const now = Date.now();
 	currentTimeElement.textContent = formatAsDate(now);
 	const timeLeftSpans = document.querySelectorAll("span.time-left") as NodeListOf<HTMLSpanElement>;
-	timeLeftSpans.forEach(timeLeftSpan => {
+	for (const timeLeftSpan of timeLeftSpans) {
 		const countdown: Countdown = countdowns[Number(timeLeftSpan.id)];
 		const timeLeft = countdown.endTime - now;
 		timeLeftSpan.textContent = formatAsDuration(timeLeft);
@@ -27,18 +27,18 @@ setInterval(() => {
 				timestamp: countdown.endTime,
 			});
 		}
-	});
+	}
 }, 100);
 
 // Adding a timer
-document.getElementById("new-timer")!.addEventListener("click", () => {
+document.querySelector("#new-timer")!.addEventListener("click", () => {
 	const currentTime = Date.now();
 
 	// Get inputs
-	const titleInput = document.getElementById("timer-title") as HTMLInputElement;
-	const hoursInput = document.getElementById("timer-hours") as HTMLInputElement;
-	const minutesInput = document.getElementById("timer-minutes") as HTMLInputElement;
-	const secondsInput = document.getElementById("timer-seconds") as HTMLInputElement;
+	const titleInput = document.querySelector("#timer-title") as HTMLInputElement;
+	const hoursInput = document.querySelector("#timer-hours") as HTMLInputElement;
+	const minutesInput = document.querySelector("#timer-minutes") as HTMLInputElement;
+	const secondsInput = document.querySelector("#timer-seconds") as HTMLInputElement;
 
 	const title = titleInput.value;
 	const hours = hoursInput.valueAsNumber || 0;
@@ -53,12 +53,12 @@ document.getElementById("new-timer")!.addEventListener("click", () => {
 });
 
 // Adding an event
-document.getElementById("new-event")!.addEventListener("click", () => {
+document.querySelector("#new-event")!.addEventListener("click", () => {
 	const currentTime = Date.now();
 
 	// Get inputs
-	const titleInput = document.getElementById("event-title") as HTMLInputElement;
-	const dateInput = document.getElementById("event-date") as HTMLInputElement;
+	const titleInput = document.querySelector("#event-title") as HTMLInputElement;
+	const dateInput = document.querySelector("#event-date") as HTMLInputElement;
 
 	const date = new Date(dateInput.value);
 
@@ -163,9 +163,9 @@ function addCountdown(countdown: Countdown) {
 	editButton.addEventListener("click", () => {
 		const endTimeAsDate = new Date(countdown.endTime);
 		// For converting Local <-> UTC
-		let offset = new Date().getTimezoneOffset() * 60000;
+		let offset = new Date().getTimezoneOffset() * 6e4;
 		// Because daylight savings
-		offset -= (offset - (endTimeAsDate.getTimezoneOffset() * 60000));
+		offset -= (offset - (endTimeAsDate.getTimezoneOffset() * 6e4));
 
 		dateEdit.hidden = !dateEdit.hidden;
 		timeEnd.hidden = !timeEnd.hidden;

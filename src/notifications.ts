@@ -1,4 +1,4 @@
-document.getElementById("enable-notifications")?.addEventListener("click", event => {
+document.querySelector("#enable-notifications")?.addEventListener("click", event => {
 	if (!("Notification" in window)) {
 		const target = event.target as HTMLButtonElement;
 		target.disabled = true;
