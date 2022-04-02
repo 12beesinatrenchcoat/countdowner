@@ -1,16 +1,32 @@
 const countdownsDiv = document.getElementById("countdowns");
 const currentTimeElement = document.getElementById("current-time")!;
+const countdowns: Array<Countdown> = [];
 
 import {formatAsDate, formatAsDuration} from "./formatting";
+import "./notifications";
 
 // Updating time
 setInterval(() => {
 	const now = Date.now();
 	currentTimeElement.textContent = formatAsDate(now);
-	const timeLeftSpans = document.querySelectorAll("span[data-end]") as NodeListOf<HTMLSpanElement>;
+	const timeLeftSpans = document.querySelectorAll("span.time-left") as NodeListOf<HTMLSpanElement>;
 	timeLeftSpans.forEach(timeLeftSpan => {
-		timeLeftSpan.textContent = formatAsDuration(
-			Number(timeLeftSpan.dataset.end) - now);
+		const countdown: Countdown = countdowns[Number(timeLeftSpan.id)];
+		const timeLeft = countdown.endTime - now;
+		timeLeftSpan.textContent = formatAsDuration(timeLeft);
+
+		// When the countdown finishes
+		if (timeLeft <= 0 && !countdown.done) {
+			console.log(`Countdown ${countdown.title} done! (ID ${countdown.startTime})`);
+			// This boolean exists to ensure the notification doesn't send more than once
+			countdown.done = true;
+
+			// eslint-disable-next-line no-unused-vars
+			const notification = new Notification(countdown.title, {
+				body: "countdown finished!",
+				timestamp: countdown.endTime,
+			});
+		}
 	});
 }, 100);
 
@@ -57,20 +73,26 @@ class Countdown {
 	startTime: number;
 	endTime: number;
 	type: "timer" | "event";
+	done: boolean;
 
 	constructor(title: string, startTime: number, endTime: number, type: "timer" | "event") {
 		this.title = title;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.type = type;
+		this.done = Date.now() >= endTime;
 	}
 }
 
 // Adding a countdown to the page
 function addCountdown(countdown: Countdown) {
+	// Adding to the countdowns object for future reference
+	countdowns[countdown.startTime] = countdown;
+
 	// Outer div, contains everything
 	const outerDiv = document.createElement("div");
 	outerDiv.classList.add("countdown", countdown.type);
+	outerDiv.id = String(countdown.startTime);
 
 	// The header
 	const headerSpan = document.createElement("span");
@@ -121,8 +143,8 @@ function addCountdown(countdown: Countdown) {
 
 	// Time left. The countdown.
 	const timeLeft = document.createElement("span");
-	timeLeft.dataset.start = String(countdown.startTime);
-	timeLeft.dataset.end = String(countdown.endTime);
+	timeLeft.id = String(countdown.startTime);
+	timeLeft.className = "time-left";
 	timeLeft.textContent = String(countdown.endTime - Date.now());
 
 	const footer = document.createElement("div");
@@ -139,7 +161,7 @@ function addCountdown(countdown: Countdown) {
 	timeEnd.textContent = formatAsDate(countdown.endTime);
 
 	editButton.addEventListener("click", () => {
-		const endTimeAsDate = new Date(Number(timeLeft.dataset.end));
+		const endTimeAsDate = new Date(countdown.endTime);
 		// For converting Local <-> UTC
 		let offset = new Date().getTimezoneOffset() * 60000;
 		// Because daylight savings
@@ -160,7 +182,7 @@ function addCountdown(countdown: Countdown) {
 			title.textContent = titleEdit.value;
 			const newEnd = new Date(dateEdit.valueAsNumber);
 			// Local -> UTC
-			timeLeft.dataset.end = String(newEnd.getTime() + offset);
+			countdown.endTime = newEnd.getTime() + offset;
 			// Also need to update the "Ends at"
 			timeEnd.textContent = formatAsDate(newEnd.getTime() + offset);
 		}
