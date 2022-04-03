@@ -14,6 +14,10 @@ const MS_IN_HOUR = 3_600_000;
 const MS_IN_MIN = 60_000;
 const MS_IN_SEC = 1000;
 function formatAsDuration(duration: number) {
+	const negative = duration < 0;
+
+	// Making sure formatting isn't weird.
+	duration = Math.abs(duration);
 	const days = Math.floor(duration / MS_IN_DAY);
 	const hours = Math.floor((duration % MS_IN_DAY) / MS_IN_HOUR);
 	const minutes = Math.floor((duration % MS_IN_HOUR) / MS_IN_MIN);
@@ -23,6 +27,7 @@ function formatAsDuration(duration: number) {
 	formatted += formatted || hours ? hours + " hours " : "";
 	formatted += formatted || minutes ? minutes + " minutes " : "";
 	formatted += formatted || seconds ? seconds + " seconds " : "";
+	formatted += negative ? " ago" : "";
 
 	return formatted;
 }
