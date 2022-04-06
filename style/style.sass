@@ -1,0 +1,163 @@
+@import "reset"
+@import "love"
+
+:root
+	font-size: 16px
+
+*
+	font-family: "Open Sans", sans-serif
+
+*[hidden]
+	display: none !important
+
+a
+	color: inherit
+
+body
+	background: var(--bg-1)
+	color: var(--fg-1)
+	margin: 1em
+
+button
+	background: var(--gray-1)
+	color: var(--bg-1)
+	position: relative
+	border: none
+
+button::after
+	content: ""
+	position: absolute
+	left: 0
+	top: 0
+	width: 100%
+	height: 100%
+
+button:hover::after
+	background: #fff3
+
+button:active::after
+	background: #fff8
+
+input
+	background: var(--bg-2)
+	color: var(--fg-2)
+	border: 1px var(--gray-3) solid
+	
+input:active
+	border: 1px var(--gray-1) solid
+
+// Tabs
+.tabbed
+	margin: 1em 0
+	display: block
+
+.tab
+	background: var(--gray-3)
+	color: var(--bg-2)
+	padding: 0.5ch
+	z-index: -99
+
+.tab-content
+	display: none
+	flex-direction: column
+	background: var(--bg-2)
+	color: var(--fg-1)
+	padding: 1em
+	margin-top: 0.75ch
+
+	scroll-margin-top: 2em
+	// Non-standard name for Safari 11-14 https://caniuse.com/mdn-css_properties_scroll-margin
+	scroll-snap-margin-top: 2em
+
+.tab-select
+	line-height: 1
+
+.selected
+	background: var(--bg-2)
+	color: var(--fg-2)
+
+// Specific tab colors
+#add-timer, #add-event, a[href="#add-timer"].selected, a[href="#add-event"].selected
+	background: var(--accent-4)
+	color: var(--bg-1)
+
+#settings, a[href="#settings"].selected
+	background: var(--accent-10)
+	color: var(--bg-1)
+
+#about, a[href="#about"].selected
+	background: var(--accent-8)
+	color: var(--bg-1)
+
+
+// Countdowns containing div
+#countdowns
+	display: flex
+	flex-direction: row
+	flex-wrap: wrap
+
+// The countdown block
+.countdown
+	display: flex
+	flex-direction: column
+	width: 40%
+	min-width: 36ch
+	max-width: 48ch
+	background: var(--bg-2)
+
+	flex-grow: 1
+
+	margin: 1em
+	border: 2px var(--fg-1) solid
+	padding: 1em
+
+.countdown-header
+	display: flex
+	align-items: center
+	justify-content: space-between
+	flex-wrap: nowrap
+	height: 2.25em
+
+	> *
+		display: inline-block
+
+.title-span
+	flex-grow: 0.75
+	flex-basis: 50%
+	overflow-x: clip
+	margin-left: -0.25ch
+	
+.title-edit
+	font-size: 1.5em
+	font-weight: 600
+	width: 100%
+
+.title
+	margin-left: 0.25ch
+
+.buttons
+	text-align: right
+	flex-shrink: 0
+	> * + *
+		margin-left: 0.5em
+
+.edit
+	width: 7ch
+	background: var(--accent-6)
+
+.delete
+	width: 10ch
+
+// The countdown bit.
+span.time-left
+	margin: 1em 0
+	font-family: "JetBrains Mono", monospace
+
+.date-edit
+	height: 1.5em
+	margin-left: -0.1ch
+
+.danger
+	background: var(--accent-1)
+	color: var(--bg-1)
+

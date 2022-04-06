@@ -21,12 +21,13 @@ function formatAsDuration(duration: number) {
 	const days = Math.floor(duration / MS_IN_DAY);
 	const hours = Math.floor((duration % MS_IN_DAY) / MS_IN_HOUR);
 	const minutes = Math.floor((duration % MS_IN_HOUR) / MS_IN_MIN);
-	const seconds = Math.floor((duration % MS_IN_MIN) / MS_IN_SEC * 100) / 100;
+	const seconds = (Math.floor((duration % MS_IN_MIN) / MS_IN_SEC * 100) / 100)
+		.toFixed(2);
 
-	let formatted = days ? days + " days " : "";
-	formatted += formatted || hours ? hours + " hours " : "";
-	formatted += formatted || minutes ? minutes + " minutes " : "";
-	formatted += formatted || seconds ? seconds + " seconds " : "";
+	let formatted = days ? days + "d " : "";
+	formatted += formatted || hours ? hours + "h " : "";
+	formatted += formatted || minutes ? minutes + "m " : "";
+	formatted += formatted || seconds ? seconds + "s " : "";
 	formatted += negative ? " ago" : "";
 
 	return formatted;

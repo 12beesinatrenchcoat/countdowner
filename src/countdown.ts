@@ -8,7 +8,11 @@ import "./notifications";
 // Updating time
 setInterval(() => {
 	const now = Date.now();
+
+	// Current time at the top.
 	currentTimeElement.textContent = formatAsDate(now);
+
+	// Updating each countdown.
 	const timeLeftSpans = document.querySelectorAll("span.time-left") as NodeListOf<HTMLSpanElement>;
 	for (const timeLeftSpan of timeLeftSpans) {
 		const countdown: Countdown = countdowns[Number(timeLeftSpan.id)];
@@ -28,7 +32,7 @@ setInterval(() => {
 			});
 		}
 	}
-}, 100);
+}, 20);
 
 // Adding a timer
 document.querySelector("#new-timer")!.addEventListener("click", () => {
@@ -67,24 +71,8 @@ document.querySelector("#new-event")!.addEventListener("click", () => {
 	addCountdown(event);
 });
 
-// Countdown class
-class Countdown {
-	title: string;
-	startTime: number;
-	endTime: number;
-	type: "timer" | "event";
-	done: boolean;
-
-	constructor(title: string, startTime: number, endTime: number, type: "timer" | "event") {
-		this.title = title;
-		this.startTime = startTime;
-		this.endTime = endTime;
-		this.type = type;
-		this.done = Date.now() >= endTime;
-	}
-}
-
 // Adding a countdown to the page
+// Used by both timers and events.
 function addCountdown(countdown: Countdown) {
 	// Adding to the countdowns object for future reference
 	countdowns[countdown.startTime] = countdown;
@@ -131,8 +119,10 @@ function addCountdown(countdown: Countdown) {
 		// Deletion confirmation
 		if (deleteButton.textContent === "delete") {
 			deleteButton.textContent = "you sure?";
+			deleteButton.classList.add("danger");
 			setTimeout(() => {
 				deleteButton.textContent = "delete";
+				deleteButton.classList.remove("danger");
 			}, 5000);
 		}
 	});
@@ -180,11 +170,16 @@ function addCountdown(countdown: Countdown) {
 		} else { // Saving
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
-			const newEnd = new Date(dateEdit.valueAsNumber);
+			const newEnd = new Date(dateEdit.valueAsNumber).getTime() + offset;
 			// Local -> UTC
-			countdown.endTime = newEnd.getTime() + offset;
+			countdown.endTime = newEnd;
 			// Also need to update the "Ends at"
-			timeEnd.textContent = formatAsDate(newEnd.getTime() + offset);
+			timeEnd.textContent = formatAsDate(newEnd);
+
+			// No longer done if the new end date is later
+			if (newEnd > Date.now()) {
+				countdown.done = false;
+			}
 		}
 	});
 
@@ -193,4 +188,21 @@ function addCountdown(countdown: Countdown) {
 	outerDiv.append(headerSpan, timeLeft, footer);
 
 	countdownsDiv?.appendChild(outerDiv);
+}
+
+// Countdown class
+class Countdown {
+	title: string;
+	startTime: number;
+	endTime: number;
+	type: "timer" | "event";
+	done: boolean;
+
+	constructor(title: string, startTime: number, endTime: number, type: "timer" | "event") {
+		this.title = title;
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.type = type;
+		this.done = Date.now() >= endTime;
+	}
 }
