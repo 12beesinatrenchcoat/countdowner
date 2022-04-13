@@ -19,6 +19,15 @@ setInterval(() => {
 		const timeLeft = countdown.endTime - now;
 		timeLeftSpan.textContent = formatAsDuration(timeLeft);
 
+		// Adding a nice gradient border
+		const percent = countdown.done ? "100%" // Limit to one if done
+			: ((
+				(now - countdown.startTime) / (countdown.endTime - countdown.startTime)
+			) * 100) + "%";
+
+		const {parentElement} = timeLeftSpan;
+		parentElement!.style.setProperty("--progress", percent);
+
 		// When the countdown finishes
 		if (timeLeft <= 0 && !countdown.done) {
 			console.log(`Countdown ${countdown.title} done! (ID ${countdown.startTime})`);

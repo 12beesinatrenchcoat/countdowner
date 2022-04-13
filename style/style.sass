@@ -99,6 +99,7 @@ input:active
 // The countdown block
 .countdown
 	display: flex
+	position: relative
 	flex-direction: column
 	width: 40%
 	min-width: 36ch
@@ -108,8 +109,24 @@ input:active
 	flex-grow: 1
 
 	margin: 1em
-	border: 2px var(--fg-1) solid
 	padding: 1em
+
+	--progress: 0%
+
+	&::before
+		content: ""
+		top: 0
+		left: 0
+		position: absolute
+		width: 100%
+		height: 100%
+		border: 4px solid
+		border-image-source: linear-gradient(135deg, var(--accent-8), var(--accent-9), var(--accent-10))
+		border-image-slice: 1
+
+		// Gradient gradually fades in
+		mask-image: linear-gradient(90deg, #fff, #fff var(--progress), #fff0, var(--progress) #fff0)
+		-webkit-mask-image: linear-gradient(90deg, #fff, #fff var(--progress), #fff0 var(--progress), #fff0)
 
 .countdown-header
 	display: flex
