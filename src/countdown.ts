@@ -1,6 +1,18 @@
 const countdownsDiv = document.querySelector("#countdowns");
 const currentTimeElement = document.querySelector("#current-time")!;
-const countdowns: Array<Countdown> = [];
+
+interface CountdownsObject {
+	[index: string]: Countdown;
+}
+
+// Loading saved countdowns from localStorage.
+const countdowns = JSON.parse(localStorage.getItem("countdowns") || "") as CountdownsObject || {};
+
+if (countdowns) {
+	for (const key of Object.keys(countdowns)) {
+		addCountdown(countdowns[key], false);
+	}
+}
 
 import {formatAsDate, formatAsDuration} from "./formatting";
 import "./notifications";
@@ -15,7 +27,7 @@ setInterval(() => {
 	// Updating each countdown.
 	const timeLeftSpans = document.querySelectorAll("span.time-left") as NodeListOf<HTMLSpanElement>;
 	for (const timeLeftSpan of timeLeftSpans) {
-		const countdown: Countdown = countdowns[Number(timeLeftSpan.id)];
+		const countdown: Countdown = countdowns[timeLeftSpan.id];
 		const timeLeft = countdown.endTime - now;
 		timeLeftSpan.textContent = formatAsDuration(timeLeft);
 
@@ -82,9 +94,12 @@ document.querySelector("#new-event")!.addEventListener("click", () => {
 
 // Adding a countdown to the page
 // Used by both timers and events.
-function addCountdown(countdown: Countdown) {
+function addCountdown(countdown: Countdown, save = true) {
 	// Adding to the countdowns object for future reference
-	countdowns[countdown.startTime] = countdown;
+	if (save) {
+		countdowns[countdown.startTime] = countdown;
+		saveCountdowns();
+	}
 
 	// Outer div, contains everything
 	const outerDiv = document.createElement("div");
@@ -123,6 +138,8 @@ function addCountdown(countdown: Countdown) {
 	deleteButton.addEventListener("click", () => {
 		if (deleteButton.textContent === "you sure?") {
 			outerDiv.remove();
+			delete countdowns[countdown.startTime];
+			saveCountdowns();
 		}
 
 		// Deletion confirmation
@@ -144,7 +161,7 @@ function addCountdown(countdown: Countdown) {
 	const timeLeft = document.createElement("span");
 	timeLeft.id = String(countdown.startTime);
 	timeLeft.className = "time-left";
-	timeLeft.textContent = String(countdown.endTime - Date.now());
+	timeLeft.textContent = formatAsDuration(countdown.endTime - Date.now());
 
 	const footer = document.createElement("div");
 	footer.className = "footer";
@@ -199,6 +216,12 @@ function addCountdown(countdown: Countdown) {
 	countdownsDiv?.appendChild(outerDiv);
 }
 
+// Saving countdowns to localStorage.
+function saveCountdowns() {
+	localStorage.setItem("countdowns", JSON.stringify(countdowns));
+	console.debug("saved!");
+}
+
 // Countdown class
 class Countdown {
 	title: string;
@@ -215,3 +238,5 @@ class Countdown {
 		this.done = Date.now() >= endTime;
 	}
 }
+
+export {addCountdown, Countdown, CountdownsObject};
