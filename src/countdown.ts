@@ -51,6 +51,8 @@ setInterval(() => {
 				body: "countdown finished!",
 				timestamp: countdown.endTime,
 			});
+
+			saveCountdowns();
 		}
 	}
 }, 20);
