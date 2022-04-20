@@ -21,6 +21,7 @@
             "avoidEscape": true,
             "allowTemplateLiterals": true
         }],
-        "no-undef": 0
+        "no-undef": 0,
+        "capitalized-comments": 0
     }
 }

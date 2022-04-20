@@ -28,17 +28,34 @@ setInterval(() => {
 	const timeLeftSpans = document.querySelectorAll("span.time-left") as NodeListOf<HTMLSpanElement>;
 	for (const timeLeftSpan of timeLeftSpans) {
 		const countdown: Countdown = countdowns[timeLeftSpan.id];
-		const timeLeft = countdown.endTime - now;
-		timeLeftSpan.textContent = formatAsDuration(timeLeft);
+
+		// Has thing started yet? (Time until started if yes)
+		const comparisonTime = countdown.started ? countdown.endTime : countdown.startTime;
+		const timeLeft = comparisonTime - now;
+
+		// Setting the prefix ("starting in", "ending in", "ended")
+		let prefix;
+
+		if (countdown.started) {
+			// done && started
+			prefix = countdown.done ? "ended " : "ending in ";
+		} else {
+			prefix = "starting in ";
+		}
+
+		timeLeftSpan.textContent = prefix + formatAsDuration(timeLeft);
 
 		// Adding a nice gradient border
-		const percent = countdown.done ? "100%" // Limit to one if done
+		const percent = countdown.done ? "100%" // Limit to 100% if done
 			: ((
 				(now - countdown.startTime) / (countdown.endTime - countdown.startTime)
 			) * 100) + "%";
 
 		const {parentElement} = timeLeftSpan;
 		parentElement!.style.setProperty("--progress", percent);
+
+		// When the countdown starts
+		countdown.started = countdown.started || now > countdown.startTime;
 
 		// When the countdown finishes
 		if (timeLeft <= 0 && !countdown.done) {
@@ -55,7 +72,7 @@ setInterval(() => {
 			saveCountdowns();
 		}
 	}
-}, 20);
+}, 100);
 
 // Adding a timer
 document.querySelector("#new-timer")!.addEventListener("click", () => {
@@ -81,17 +98,29 @@ document.querySelector("#new-timer")!.addEventListener("click", () => {
 
 // Adding an event
 document.querySelector("#new-event")!.addEventListener("click", () => {
-	const currentTime = Date.now();
+	const newEventButton = document.querySelector("#new-event")! as HTMLButtonElement;
 
-	// Get inputs
-	const titleInput = document.querySelector("#event-title") as HTMLInputElement;
-	const dateInput = document.querySelector("#event-date") as HTMLInputElement;
+	if (!newEventButton.dataset.warning || newEventButton.textContent === newEventButton.dataset.warning) {
+		const titleInput = document.querySelector("#event-title") as HTMLInputElement;
+		const startInput = document.querySelector("#event-start") as HTMLInputElement;
+		const endInput = document.querySelector("#event-end") as HTMLInputElement;
 
-	const date = new Date(dateInput.value);
+		const startDate = new Date(startInput.value);
+		const endDate = new Date(endInput.value);
 
-	const event = new Countdown(titleInput.value, currentTime, date.getTime(), "event");
+		const event = new Countdown(titleInput.value, startDate.getTime(), endDate.getTime(), "event");
 
-	addCountdown(event);
+		addCountdown(event);
+
+		newEventButton.textContent = "add event";
+	}
+
+	if (newEventButton.dataset.warning) {
+		newEventButton.textContent = newEventButton.dataset.warning;
+		setTimeout(() => {
+			newEventButton.textContent = "add event";
+		}, 5000);
+	}
 });
 
 // Adding a countdown to the page
@@ -168,24 +197,45 @@ function addCountdown(countdown: Countdown, save = true) {
 	const footer = document.createElement("div");
 	footer.className = "footer";
 
-	// Editing!
-	const dateEdit = document.createElement("input");
-	dateEdit.type = "datetime-local";
-	dateEdit.className = "date-edit";
-	dateEdit.hidden = true;
+	const startDateEdit = document.createElement("input");
+	startDateEdit.type = "datetime-local";
+	startDateEdit.className = "start-date-edit";
+	startDateEdit.hidden = true;
+
+	const timeStart = document.createElement("time");
+	timeStart.className = "start";
+	timeStart.textContent = `${countdown.started ? "started" : "starts"} ${formatAsDate(countdown.startTime)}`;
+
+	const endDateEdit = document.createElement("input");
+	endDateEdit.type = "datetime-local";
+	endDateEdit.className = "end-date-edit";
+	endDateEdit.hidden = true;
 
 	const timeEnd = document.createElement("time");
 	timeEnd.className = "start";
-	timeEnd.textContent = formatAsDate(countdown.endTime);
+	timeEnd.textContent = `${countdown.done ? "ended" : "ends"} ${formatAsDate(countdown.endTime)}`;
+
+	const startTimeDiv = document.createElement("div");
+	startTimeDiv.append(timeStart, startDateEdit);
+
+	const endTimeDiv = document.createElement("div");
+	endTimeDiv.append(timeEnd, endDateEdit);
+
+	footer.append(startTimeDiv, endTimeDiv);
+
+	outerDiv.append(headerSpan, timeLeft, footer);
+
+	countdownsDiv?.appendChild(outerDiv);
 
 	editButton.addEventListener("click", () => {
+		const startTimeAsDate = new Date(countdown.startTime);
 		const endTimeAsDate = new Date(countdown.endTime);
 		// For converting Local <-> UTC
 		let offset = new Date().getTimezoneOffset() * 6e4;
 		// Because daylight savings
 		offset -= (offset - (endTimeAsDate.getTimezoneOffset() * 6e4));
 
-		dateEdit.hidden = !dateEdit.hidden;
+		endDateEdit.hidden = !endDateEdit.hidden;
 		timeEnd.hidden = !timeEnd.hidden;
 		title.hidden = !title.hidden;
 		titleEdit.hidden = !titleEdit.hidden;
@@ -194,15 +244,19 @@ function addCountdown(countdown: Countdown, save = true) {
 			editButton.textContent = "save";
 			titleEdit.value = title.textContent || "";
 			// UTC -> Local
-			dateEdit.valueAsNumber = endTimeAsDate.getTime() - offset;
+			startDateEdit.valueAsNumber = startTimeAsDate.getTime() - offset;
+			endDateEdit.valueAsNumber = endTimeAsDate.getTime() - offset;
 		} else { // Saving
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
-			const newEnd = new Date(dateEdit.valueAsNumber).getTime() + offset;
+			const newStart = new Date(startDateEdit.valueAsNumber).getTime() + offset;
+			const newEnd = new Date(endDateEdit.valueAsNumber).getTime() + offset;
 			// Local -> UTC
+			countdown.startTime = newStart;
 			countdown.endTime = newEnd;
-			// Also need to update the "Ends at"
-			timeEnd.textContent = formatAsDate(newEnd);
+			// Also need to update the "Ends"
+			timeStart.textContent = `${countdown.started ? "started" : "starts"} ${formatAsDate(newStart)}`;
+			timeEnd.textContent = `${countdown.done ? "ended" : "ends"} ${formatAsDate(newStart)}`;
 
 			// No longer done if the new end date is later
 			if (newEnd > Date.now()) {
@@ -210,12 +264,6 @@ function addCountdown(countdown: Countdown, save = true) {
 			}
 		}
 	});
-
-	footer.append("Ends at ", dateEdit, timeEnd);
-
-	outerDiv.append(headerSpan, timeLeft, footer);
-
-	countdownsDiv?.appendChild(outerDiv);
 }
 
 // Saving countdowns to localStorage.
@@ -227,17 +275,23 @@ function saveCountdowns() {
 // Countdown class
 class Countdown {
 	title: string;
+	createTime: number;
 	startTime: number;
 	endTime: number;
 	type: "timer" | "event";
+	started: boolean;
 	done: boolean;
 
 	constructor(title: string, startTime: number, endTime: number, type: "timer" | "event") {
+		const now = Date.now();
+
 		this.title = title;
+		this.createTime = now;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.type = type;
-		this.done = Date.now() >= endTime;
+		this.started = now >= startTime;
+		this.done = now >= endTime;
 	}
 }
 

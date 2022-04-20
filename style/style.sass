@@ -42,9 +42,15 @@ input
 	background: var(--bg-2)
 	color: var(--fg-2)
 	border: 1px var(--gray-3) solid
-	
+
+input[type=number]
+	width: 4ch
+
 input:active
 	border: 1px var(--gray-1) solid
+
+input.invalid
+	border-color: var(--accent-1)
 
 // Tabs
 .tabbed
@@ -89,6 +95,9 @@ input:active
 	background: var(--accent-8)
 	color: var(--bg-1)
 
+/* STUFF ABOUT THE COUNTDOWNS
+	MULTILINE COMMENT AS HEADER WOO
+		NOTICE ME */
 
 // Countdowns containing div
 #countdowns
@@ -101,12 +110,16 @@ input:active
 	display: flex
 	position: relative
 	flex-direction: column
-	width: 40%
-	min-width: 36ch
-	max-width: 48ch
+	min-width: 48ch
+	max-width: 100%
 	background: var(--bg-2)
 
 	flex-grow: 1
+	flex-shrink: 0
+
+	@media (min-width: 800px)
+		flex-grow: 0
+		max-width: 45vw
 
 	margin: 1em
 	padding: 1em
@@ -125,8 +138,14 @@ input:active
 		border-image-slice: 1
 
 		// Gradient gradually fades in
+		// For Firefox...
 		mask-image: linear-gradient(90deg, #fff, #fff var(--progress), #fff0, var(--progress) #fff0)
+		// For other browsers. 
 		-webkit-mask-image: linear-gradient(90deg, #fff, #fff var(--progress), #fff0 var(--progress), #fff0)
+		// See https://developer.mozilla.org/en-US/docs/web/css/mask-image#browser_compatibility
+
+		// To prevent edit inputs from being unselectable.
+		pointer-events: none
 
 .countdown-header
 	display: flex
