@@ -18,8 +18,8 @@ if (countdowns) {
 import {formatAsDate, formatAsDuration} from "./formatting";
 import "./notifications";
 
-// Updating time
-setInterval(() => {
+// Updating the page
+function updatePage() {
 	const now = Date.now();
 
 	// Current time at the top.
@@ -73,7 +73,11 @@ setInterval(() => {
 			saveCountdowns();
 		}
 	}
-}, 100);
+
+	setTimeout(updatePage, Number(window.settings["update-rate"]));
+}
+
+setTimeout(updatePage, Number(window.settings["update-rate"]));
 
 // Adding a timer
 document.querySelector("#new-timer")!.addEventListener("click", () => {
@@ -271,8 +275,11 @@ function addCountdown(countdown: Countdown, save = true) {
 
 // Saving countdowns to localStorage.
 function saveCountdowns() {
-	localStorage.setItem("countdowns", JSON.stringify(countdowns));
-	console.debug("saved!");
+	const countdownsString = JSON.stringify(countdowns);
+	localStorage.setItem("countdowns", countdownsString);
+	console.groupCollapsed("saved countdowns!");
+	console.debug(countdownsString);
+	console.groupEnd();
 }
 
 // Countdown class

@@ -4,14 +4,20 @@
 	--blu: #37a5ff;
 	--mgn: #f02aea;
 
+	--red-br: #f4525d;
+	--grn-br: #62f149;
+	--blu-br: #60b7ff;
+	--mgn-br: #f750f1;
+
 	--red-t: #eb303c88;
 	--grn-t: #42e62488;
 	--blu-t: #37a5ff88;
 	--mgn-t: #f02aea88;
 
-	--bg-1: #111;
-	--bg-2: #333;
-	--bg-3: #444;
+	--bg-1: #112;
+	--bg-2: #334;
+	--bg-3: #445;
+	--bg-4: #556;
 	--gr: #ccc;
 	--fg: #fff;
 }

@@ -194,3 +194,53 @@ span.time-left
 	background: var(--red-t)
 	color: var(--white)
 
+/* Settings and their tooltips */
+#settings > label > input
+	vertical-align: middle
+	position: relative
+
+	&::after
+		display: none
+		position: absolute
+		bottom: 1em
+		max-width: 48ch
+		background: var(--bg-4)
+		border: 2px solid var(--gr)
+		padding: 0.5em
+		pointer-events: none
+
+	&:hover::after, &:active::after, &:focus::after
+		display: block
+
+input[type="range"]
+	-webkit-appearance: none
+	width: 50%
+	height: 4px
+	background: var(--bg-4)
+	background-image: linear-gradient(var(--blu), var(--blu))
+	background-repeat: no-repeat
+	border: none
+
+	&:hover
+		background-image: linear-gradient(var(--blu-br), var(--blu-br))
+
+	&::-webkit-slider-thumb //, &::-moz-range-thumb, &::-ms-thumb
+		-webkit-appearance: none
+		cursor: pointer
+		height: 1em
+		width: 1em
+		border-radius: 50%
+		background: var(--blu)
+
+		&:hover
+			border: 1px solid #fff2
+			box-shadow: 0 0 4px var(--blu-br)
+			background: var(--blu-br)
+
+	&::-webkit-slider-runnable-track, &::-moz-range-track, &::-ms-track
+		-webkit-appearance: none
+		box-shadow: none
+		border: none
+
+input[name="update-rate"]::after
+	content: "How frequently the page and all the countdowns update. Minimum 1ms, maximum 250ms."
