@@ -1,5 +1,7 @@
 @import "reset"
-@import "love"
+@import "colors"
+
+$timer-border-width: 0.5ch
 
 :root
 	font-size: 16px
@@ -15,12 +17,12 @@ a
 
 body
 	background: var(--bg-1)
-	color: var(--fg-1)
+	color: var(--fg)
 	margin: 1em
 
 button
-	background: var(--gray-1)
-	color: var(--bg-1)
+	background: var(--bg-2)
+	color: var(--fg)
 	position: relative
 	border: none
 
@@ -33,24 +35,24 @@ button::after
 	height: 100%
 
 button:hover::after
-	background: #fff3
+	background: #0001
 
 button:active::after
-	background: #fff8
+	background: #0003
 
 input
-	background: var(--bg-2)
-	color: var(--fg-2)
-	border: 1px var(--gray-3) solid
+	background: var(--bg-3)
+	color: var(--fg)
+	border: 1px var(--gr) solid
 
 input[type=number]
 	width: 4ch
 
 input:active
-	border: 1px var(--gray-1) solid
+	border: 1px var(--gr) solid
 
 input.invalid
-	border-color: var(--accent-1)
+	border-color: var(--red)
 
 // Tabs
 .tabbed
@@ -58,18 +60,20 @@ input.invalid
 	display: block
 
 .tab
-	background: var(--gray-3)
-	color: var(--bg-2)
+	background: var(--bg-2)
+	color: var(--fg)
 	padding: 0.5ch
 	z-index: -99
 
 .tab-content
 	display: none
 	flex-direction: column
-	background: var(--bg-2)
-	color: var(--fg-1)
+	background: var(--bg-3)
+	color: var(--fg)
 	padding: 1em
 	margin-top: 0.75ch
+
+	max-width: 72ch
 
 	scroll-margin-top: 2em
 	// Non-standard name for Safari 11-14 https://caniuse.com/mdn-css_properties_scroll-margin
@@ -79,21 +83,8 @@ input.invalid
 	line-height: 1
 
 .selected
-	background: var(--bg-2)
-	color: var(--fg-2)
-
-// Specific tab colors
-#add-timer, #add-event, a[href="#add-timer"].selected, a[href="#add-event"].selected
-	background: var(--accent-4)
-	color: var(--bg-1)
-
-#settings, a[href="#settings"].selected
-	background: var(--accent-10)
-	color: var(--bg-1)
-
-#about, a[href="#about"].selected
-	background: var(--accent-8)
-	color: var(--bg-1)
+	background: var(--bg-3)
+	color: var(--fg)
 
 /* STUFF ABOUT THE COUNTDOWNS
 	MULTILINE COMMENT AS HEADER WOO
@@ -112,7 +103,7 @@ input.invalid
 	flex-direction: column
 	min-width: 48ch
 	max-width: 100%
-	background: var(--bg-2)
+	background: var(--bg)
 
 	flex-grow: 1
 	flex-shrink: 0
@@ -133,8 +124,8 @@ input.invalid
 		position: absolute
 		width: 100%
 		height: 100%
-		border: 4px solid
-		border-image-source: linear-gradient(135deg, var(--accent-8), var(--accent-9), var(--accent-10))
+		border: $timer-border-width solid
+		border-image-source: linear-gradient(135deg, var(--blu), var(--mgn))
 		border-image-slice: 1
 
 		// Gradient gradually fades in
@@ -179,7 +170,7 @@ input.invalid
 
 .edit
 	width: 7ch
-	background: var(--accent-6)
+	background: var(--bg-2)
 
 .delete
 	width: 10ch
@@ -194,6 +185,6 @@ span.time-left
 	margin-left: -0.1ch
 
 .danger
-	background: var(--accent-1)
-	color: var(--bg-1)
+	background: var(--red-t)
+	color: var(--white)
 

@@ -1,0 +1,17 @@
+:root {
+	--red: #eb303c;
+	--grn: #42e624;
+	--blu: #37a5ff;
+	--mgn: #f02aea;
+
+	--red-t: #eb303c88;
+	--grn-t: #42e62488;
+	--blu-t: #37a5ff88;
+	--mgn-t: #f02aea88;
+
+	--bg-1: #111;
+	--bg-2: #333;
+	--bg-3: #444;
+	--gr: #ccc;
+	--fg: #fff;
+}
