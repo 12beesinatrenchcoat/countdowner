@@ -6,7 +6,8 @@ interface CountdownsObject {
 }
 
 // Loading saved countdowns from localStorage.
-const countdowns = JSON.parse(localStorage.getItem("countdowns") || "") as CountdownsObject || {};
+const saved = localStorage.getItem("countdowns");
+const countdowns = saved ? JSON.parse(saved) as CountdownsObject : {};
 
 if (countdowns) {
 	for (const key of Object.keys(countdowns)) {
@@ -212,7 +213,7 @@ function addCountdown(countdown: Countdown, save = true) {
 	endDateEdit.hidden = true;
 
 	const timeEnd = document.createElement("time");
-	timeEnd.className = "start";
+	timeEnd.className = "end";
 	timeEnd.textContent = `${countdown.done ? "ended" : "ends"} ${formatAsDate(countdown.endTime)}`;
 
 	const startTimeDiv = document.createElement("div");
@@ -249,19 +250,21 @@ function addCountdown(countdown: Countdown, save = true) {
 		} else { // Saving
 			editButton.textContent = "edit";
 			title.textContent = titleEdit.value;
+			// Local -> UTC
 			const newStart = new Date(startDateEdit.valueAsNumber).getTime() + offset;
 			const newEnd = new Date(endDateEdit.valueAsNumber).getTime() + offset;
-			// Local -> UTC
 			countdown.startTime = newStart;
 			countdown.endTime = newEnd;
 			// Also need to update the "Ends"
 			timeStart.textContent = `${countdown.started ? "started" : "starts"} ${formatAsDate(newStart)}`;
-			timeEnd.textContent = `${countdown.done ? "ended" : "ends"} ${formatAsDate(newStart)}`;
+			timeEnd.textContent = `${countdown.done ? "ended" : "ends"} ${formatAsDate(newEnd)}`;
 
 			// No longer done if the new end date is later
 			if (newEnd > Date.now()) {
 				countdown.done = false;
 			}
+
+			saveCountdowns();
 		}
 	});
 }
