@@ -117,14 +117,23 @@ input.invalid
 
 	--progress: 0%
 
-	&::before
+	&::before, &::after
+		position: absolute
 		content: ""
 		top: 0
 		left: 0
-		position: absolute
 		width: 100%
 		height: 100%
 		border: $timer-border-width solid
+
+		// To prevent edit inputs from being unselectable.
+		pointer-events: none
+
+	&::before
+		border-color: var(--bg-3)
+
+
+	&::after
 		border-image-source: linear-gradient(135deg, var(--blu), var(--mgn))
 		border-image-slice: 1
 
@@ -134,9 +143,6 @@ input.invalid
 		// For other browsers. 
 		-webkit-mask-image: linear-gradient(90deg, #fff, #fff var(--progress), #fff0 var(--progress), #fff0)
 		// See https://developer.mozilla.org/en-US/docs/web/css/mask-image#browser_compatibility
-
-		// To prevent edit inputs from being unselectable.
-		pointer-events: none
 
 .countdown-header
 	display: flex
