@@ -1,0 +1,37 @@
+name: Build and deploy site
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  github-pages:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: checking out
+        uses: actions/checkout@v2
+
+      - name: use node.js 18
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18
+        
+      - name: building the thing
+        run: |
+          npm ci
+          npm run build
+
+      - name: commit to gh-pages
+        run: |
+          git config --global user.email "<>"
+          git config --global user.name "GitHub Actions"
+          COMMIT=$(git rev-parse HEAD)
+          git checkout --orphan gh-pages
+          echo node_modules > .gitignore
+          git add index.html script.js style.css
+          git commit -m "build for $COMMIT"
+          git push origin gh-pages --force
+    

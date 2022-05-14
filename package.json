@@ -4,10 +4,8 @@
   "description": "a countdown timer app.",
   "private": true,
   "scripts": {
-    "prebuild": "rimraf dist",
-    "build": "npm run ts && npm run sass",
-    "ts": "esbuild src/script.ts --sourcemap --bundle --outfile=dist/script.js",
-    "sass": "sass style/style.sass style.css",
+    "dev": "npx esbuild src/script.ts --sourcemap --bundle --outfile=./script.js && npx sass style/style.sass style.css",
+    "build": "npx esbuild src/script.ts --minify --bundle --outfile=./script.js && npx sass --no-source-map --style=compressed style/style.sass style.css",
     "test": "tsc -noEmit && eslint src/**"
   },
   "repository": {
