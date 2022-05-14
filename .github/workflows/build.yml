@@ -30,8 +30,9 @@ jobs:
           git config --global user.name "GitHub Actions"
           COMMIT=$(git rev-parse HEAD)
           git checkout --orphan gh-pages
-          echo node_modules > .gitignore
-          git add index.html script.js style.css
+          git rm -r --cached .
+          echo -e "node_modules\n.e*\n.github\n.vscode\npackage*\ntsconfig.json\n*.map\n*src\nstyle" > .gitignore
+          git add -A
           git commit -m "build for $COMMIT"
           git push origin gh-pages --force
     
