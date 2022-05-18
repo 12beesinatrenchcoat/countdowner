@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>countdowner</title>
+		<link rel="stylesheet" href="./style.css">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="application-name" content="countdowner">
+		<meta name="description" content="a countdown app">
+		<script defer src="./script.js"></script>
+		<!-- fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+		<!-- icons -->
+		<link rel="icon" href="./favicon.ico" sizes="any">
+		<link rel="icon" href="./icon.svg" type="image/svg+xml">
+		<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+		<link rel="manifest" href="./manifest.webmanifest">
+		<!-- open graph protocol -->
+		<meta property="og:title" content="countdowner" />
+		<meta property="og:type" content="website"/>
+		<meta property="og:url" content="https://12beesinatrenchcoat.github.io/countdowner"/>
+		<meta property="og:image" content="https://12beesinatrenchcoat.github.io/countdowner/banner.png"/>
+		<meta property="og:description" content="a countdown timer app"/>
+		<!-- other meta tags -->
+		<meta name="theme-color" content="#F02AEA"/>
+		<meta name="twitter:card" content="summary_large_image">
+	</head>
+
+	<body>
+		<h1>countdowner</h1>
+		<p>
+			current time: <time id="current-time">now</time>
+		</p>
+
+		<div class="tabbed">
+			<div class="tab-select">
+				<a href="#add-timer" class="tab">add timer</a>
+				<a href="#add-event" class="tab">add event</a>
+				<a href="#settings" class="tab">settings</a>
+				<a href="#about" class="tab">about</a>
+			</div>
+			<div class="tab-content" id="add-timer">
+				<label>
+					title <input type="text" id="timer-title">
+				</label>
+				<span>
+					<label>
+						<input type="number" id="timer-hours"> hours
+					</label>
+					<label>
+						<input type="number" id="timer-minutes"> minutes
+					</label>
+					<label>
+						<input type="number" id="timer-seconds"> seconds
+					</label>
+				</span>
+				<button id="new-timer">add timer</button>
+			</div>
+			<div class="tab-content" id="add-event">
+				<label>
+					title <input type="text" id="event-title">
+				</label>
+				<label>
+					start
+					<input type="datetime-local" id="event-start">
+				</label>
+				<label>
+					end
+					<input type="datetime-local" id="event-end">
+				</label>
+				<button id="new-event">add event</button>
+			</div>
+			<div class="tab-content" id="settings">
+				<button id="enable-notifications">enable notifications </button>
+				<label>update rate
+					<input name="update-rate" list="update-rates" type="range" min="1" max="250" value="10">
+					<span class="update-rate-output">10</span>ms
+				</label>
+			</div>
+			<div class="tab-content" id="about">
+				<span>
+					<strong>countdowner</strong> is a webapp that lets you create countdowns to certain times.
+				</span>
+				<p>It was created by <a href="https://github.com/12beesinatrenchcoat">12beesinatrenchcoat (Andy
+						Chan)</a> as a way to learn more about TypeScript, bundling, and Progressive Web Apps (although that last one isn't really done yet).</p>
+				<p>The project is open source under the MIT License and its source code can be found <a
+						href="https://github.com/12beesinatrenchcoat/countdowner">here</a>.</p>
+			</div>
+		</div>
+
+		<div id="countdowns">
+
+		</div>
+	</body>
+
+</html>

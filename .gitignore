@@ -1,0 +1,9 @@
+node_modules
+.e*
+.github
+.vscode
+package*
+tsconfig.json
+*.map
+*src
+style
